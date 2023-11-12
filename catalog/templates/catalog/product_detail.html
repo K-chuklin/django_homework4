@@ -1,0 +1,51 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+
+<div class="container ">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3 box-shadow ">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal text-center">{{object.name}} ({{object.slug}})</h4>
+                </div>
+                <div class="card-body text-right">
+                    {% if object.image %}
+                        <img src="{{object.image.url}}" width="250" height="250" alt="Фото товара" class="rounded mx-auto d-block">
+                    {% else %}
+                        <p> нет изображения </p>
+                    {% endif %}
+                    <table class="table table-striped ">
+                        <tr>
+                            <td class="w-25 ">Цена</td>
+                            <td>{{object.price}} руб.</td>
+                        </tr>
+                        <tr>
+                            <td class="w-25">Описание</td>
+                            <td>{{object.description|linebreaksbr}}</td>
+                        </tr>
+                        <tr>
+                            {% if object.owner %}
+                                <td class="w-25">Продавец</td>
+                                <td>{{object.owner}}</td>
+                            {% else %}
+                                <td class="w-25">Продавец</td>
+                                <td>Не указан</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td class="w-25">Просмотры</td>
+                            <td>{{object.views_counter}}</td>
+                        </tr>
+                    </table>
+                    {%if user.is_authenticated %}
+                        <a type="button" class="btn btn-lg btn-block btn-outline-success">Купить</a>
+                        <a type="button" class="btn btn-lg btn-block btn-outline-warning" href= "{% url 'catalog:update' object.pk %}">Редактировать</a>
+                        <a type="button" class="btn btn-lg btn-block btn-outline-danger" href= "{% url 'catalog:delete' object.pk %}">Удалить</a>
+                    {% else %}
+                        <span class="text-center"> Для покупки необходиммо авторизоваться, либо зарегистрироваться</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

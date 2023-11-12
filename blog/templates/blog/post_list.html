@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-6">Публикации</h1>
+</div>
+
+<div class="container">
+    {% if object_list %}
+        <div class="row text-center">
+            {% for object in object_list %}
+            {% include 'blog/includes/inc_post_card.html' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row text-center">
+            <h4>Пока, публикаций нет :(</h4>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

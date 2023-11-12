@@ -1,0 +1,13 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <p class="lead">МойМагазин - это отличный вариант площадки, на которой каждый можете что-нибудь продать или купить</p>
+</div>
+
+<div class="container ">
+    <div class="row text-center">
+        {% for object in object_list %}
+        {% include 'catalog/includes/inc_product.html' %}
+        {% endfor %}
+    </div>
+{% endblock %}

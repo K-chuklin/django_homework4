@@ -1,0 +1,33 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+
+
+<div class="container ">
+    <div class="row text-center">
+        {% for object in object_list %}
+            <div class="col-5">
+                <div class="card mb-3 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{object.name}}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{object.price}} руб.</h1>
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3 card-text text-center">
+                            {% if object.image %}
+                                <img src="{{object.image.url}}" width="250" height="250" alt="Фото товара" class="rounded mx-auto d-block">
+                            {% else %}
+                                <p> нет изображения </p>
+                            {% endif %}
+                                <span class="m-2">Модификация: {{ object.active_version_number|default:"Отсутствует" }}</span>
+                            <hr>
+                                <span class="m-2">Продавец: {{ object.owner|default:"Не указан" }}</span>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a type="button" class="btn btn-lg btn-block btn-outline-primary" href= "{% url 'catalog:detail' object.pk %}">Cмотреть</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

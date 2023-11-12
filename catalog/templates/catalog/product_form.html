@@ -1,0 +1,36 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+    <div class="text-center container">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="col-12">
+                <div class="row">
+                    <div class="card col-6 m-2">
+                        <div class="card-body">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                             <button type="submit" class="btn btn-success">
+                                {% if object %}
+                                    Сохранить
+                                {% else %}
+                                    Cоздать
+                                {% endif %}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card col-6 m-2">
+                        <div class="card-body">
+                            {{ formset.management_form }}
+                            {% for form in formset.forms %}
+                                {{ form.as_p }}
+                            {% if not forloop.last %}
+                                <hr>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
