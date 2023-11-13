@@ -30,15 +30,15 @@ class Product(models.Model):
     last_modification_date = models.DateField(**NULLABLE, verbose_name='Дата последнего изминения')
 
     views_counter = models.IntegerField(default=0, verbose_name='просмотры')
-    is_published = models.BooleanField(default=True, verbose_name='опубликовано')
+    is_published = models.BooleanField(default=False, verbose_name='опубликовано')
     slug = models.CharField(max_length=150, verbose_name='slug', **NULLABLE)
 
     def __str__(self):
         return f'{self.name}{self.price}'
 
     class Meta:
-        verbose_name = 'Наименование'
-        verbose_name_plural = 'Наименования'
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
 
 
 class Version(models.Model):

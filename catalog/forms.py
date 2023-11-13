@@ -9,14 +9,15 @@ class StyleFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            if field_name != 'is_published':
+                field.widget.attrs['class'] = 'form-control'
 
 
 class ProductForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('name', 'description', 'image', 'category', 'price')
+        fields = ('name', 'description', 'image', 'category', 'price', 'is_published')
 
     def clean_name(self):
         cleaned_data = self.cleaned_data['name']

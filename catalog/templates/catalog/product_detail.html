@@ -37,12 +37,12 @@
                             <td>{{object.views_counter}}</td>
                         </tr>
                     </table>
-                    {%if user.is_authenticated %}
+                    {% if user.is_authenticated %}
                         <a type="button" class="btn btn-lg btn-block btn-outline-success">Купить</a>
+<!--                        {% if object.owner or user.is_staff %}-->
                         <a type="button" class="btn btn-lg btn-block btn-outline-warning" href= "{% url 'catalog:update' object.pk %}">Редактировать</a>
                         <a type="button" class="btn btn-lg btn-block btn-outline-danger" href= "{% url 'catalog:delete' object.pk %}">Удалить</a>
-                    {% else %}
-                        <span class="text-center"> Для покупки необходиммо авторизоваться, либо зарегистрироваться</span>
+<!--                        {% endif %}-->
                     {% endif %}
                 </div>
             </div>

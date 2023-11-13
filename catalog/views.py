@@ -1,7 +1,7 @@
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from catalog.forms import VersionForm, ProductForm
 from catalog.models import Product, Category, Version
 from pytils.translit import slugify
@@ -48,7 +48,7 @@ class ProductListView(ListView):
         return context_data
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     extra_context = {'title': '@: Каталог обьявлений'}
     model = Product
 
@@ -59,7 +59,7 @@ class ProductDetailView(DetailView):
         return self.object
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:index')
@@ -76,10 +76,16 @@ class ProductCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:index')
+
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset().filter(
+            category_id=self.kwargs.get('pk'),
+            owner=self.request.user
+        )
 
     def get_success_url(self):
         return reverse('catalog:detail', args=[self.kwargs.get('pk')])
@@ -111,9 +117,15 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:index')
+
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset().filter(
+            category_id=self.kwargs.get('pk'),
+            owner=self.request.user
+        )
 
 
 class ContactsTemplateView(TemplateView):
