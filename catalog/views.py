@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from catalog.forms import VersionForm, ProductForm
 from catalog.models import Product, Category, Version
 from pytils.translit import slugify
+from django.http import Http404
 
 
 class IndexView(TemplateView):
@@ -81,11 +82,17 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProductForm
     success_url = reverse_lazy('catalog:index')
 
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset().filter(
-            category_id=self.kwargs.get('pk'),
-            owner=self.request.user
-        )
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.owner != self.request.user:
+            raise Http404
+        return self.object
+
+    # def get_queryset(self, *args, **kwargs):
+    #     return super().get_queryset().filter(
+    #         category_id=self.kwargs.get('pk'),
+    #         owner=self.request.user
+    #     )
 
     def get_success_url(self):
         return reverse('catalog:detail', args=[self.kwargs.get('pk')])
