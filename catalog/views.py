@@ -6,6 +6,7 @@ from catalog.forms import VersionForm, ProductForm
 from catalog.models import Product, Category, Version
 from pytils.translit import slugify
 from django.http import Http404
+from catalog.services import get_category_cache
 
 
 class IndexView(TemplateView):
@@ -19,8 +20,11 @@ class IndexView(TemplateView):
 
 
 class CategoryListView(ListView):
-    extra_context = {'title': '@: Cписок категорий'}
     model = Category
+    extra_context = {
+        'object_list': get_category_cache(),
+        'title': '@: Cписок категорий'
+    }
 
 
 class ProductListView(ListView):

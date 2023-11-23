@@ -8,7 +8,6 @@ from users.forms import UserRegisterForm, UserForm
 from users.models import User
 from django.urls import reverse_lazy, reverse
 from django.conf import settings
-from django.core.mail import send_mail
 from django.shortcuts import redirect, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -52,13 +51,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 def generate_password(request):
     symbols = list('QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm123456789')
     new_password = ''.join([str(random.choice(symbols)) for _ in range(10)])
-    send_mail(
-        subject="Новый пароль от платформы МойМагазин!",
-        message=f"Выш новый пароль {new_password}",
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[request.user.email]
-    )
     request.user.set_password(new_password)
     request.user.save()
-
+    send_new_password(request.user.email, new_password)
     return redirect(reverse('catalog:index'))
